@@ -16,7 +16,9 @@ import { TabComponent } from './tab/tab.component';
     CommonModule
   ],
   exports: [
-    ModalComponent
+    ModalComponent,
+    TabsContainerComponent,
+    TabComponent
   ]
 })
 export class SharedModule { }
