@@ -33,12 +33,17 @@ export class RegisterComponent {
       Validators.maxLength(13)
     ]),
   });
+  showAlert = false;
+  alertMsg = 'Please wait! Your account is being created.';
+  alertColor = 'blue';
 
   constructor() {
     this.registerForm.controls.name;
   }
 
   register() {
-    console.log('Resgistration Success!!');
+    this.showAlert = true;
+    this.alertMsg = 'Please wait! Your account is being created.';
+    this.alertColor = 'blue';
   }
 }
