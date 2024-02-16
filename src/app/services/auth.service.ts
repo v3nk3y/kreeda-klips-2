@@ -15,14 +15,22 @@ export class AuthService {
     if(!userData.password) {
       throw new Error('Password is required !')
     }
+
     const userCredentials = await this.auth.createUserWithEmailAndPassword(
       userData.email as string, userData.password as string
     );
-    await this.usersCollection.add({
+
+    if(!userCredentials.user) {
+      throw new Error('User not found !')
+    }
+
+    await this.usersCollection.doc(userCredentials.user?.uid).set({
       name: userData.name,
       email: userData.email,
       age: userData.age,
       phoneNumber: userData.phoneNumber,
     });
+
+    userCredentials.user.updateProfile({ displayName: userData.name});
   }
 }
