@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ModalService } from '../services/modal.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-nav',
@@ -8,7 +9,7 @@ import { ModalService } from '../services/modal.service';
 })
 export class NavComponent {
 
-  constructor(private modalService: ModalService) {}
+  constructor(private modalService: ModalService, public auth: AuthService) {}
 
   openModal($event: Event) {
     $event.preventDefault();
