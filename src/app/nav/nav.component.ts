@@ -10,15 +10,11 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 })
 export class NavComponent {
 
-  constructor(private modalService: ModalService, public auth: AuthService, public afAuth: AngularFireAuth) {}
+  constructor(private modalService: ModalService, public auth: AuthService) {}
 
   openModal($event: Event) {
     $event.preventDefault();
     this.modalService.toggleModal('auth');
   }
-
-  async signOut($event: Event) {
-    $event.preventDefault();
-    await this.afAuth.signOut();
-  }
+  
 }
