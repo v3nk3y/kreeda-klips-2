@@ -22,6 +22,9 @@ export class UploadComponent {
   alertMsg = 'Please wait ! Your clip is being uploaded.';
   inSubmission = false;
 
+  // uploadPercentage
+  percentage = 0;
+
   // FormControl for Video title capture
   title = new FormControl('', [
     Validators.required,
@@ -85,7 +88,13 @@ export class UploadComponent {
     // For giving the clip an unique name/id - for not overriding on firebase
     const clipFileName = uuid()
     const clipPath = `clips/${clipFileName}.mp4`;
+
     // Uploading file to firebase
-    this.storage.upload(clipPath, this.file);
+    const uploadTask = this.storage.upload(clipPath, this.file);
+    // To track the uploading percentage status
+    uploadTask.percentageChanges().subscribe(progress => {
+      // By default we get the value multiplied by 100 i.e we get 10,000 - so divide by 100 to get the 100%
+      this.percentage = (progress as number)/100;
+    });
   }
 }
