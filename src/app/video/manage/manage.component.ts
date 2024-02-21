@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import IClip from '../../models/clip.model';
-// import { ModalService } from 'src/app/services/modal.service';
 import { BehaviorSubject } from 'rxjs';
 import { ClipService } from '../../services/clip.service';
+import { ModalService } from '../../services/modal.service';
 
 @Component({
   selector: 'app-manage',
@@ -14,7 +14,7 @@ export class ManageComponent implements OnInit {
   videoOrder = '1';
   // to store the user clips
   clips: IClip[] = [];
-  // to determine the ctive clip
+  // to determine the active clip
   activeClip: IClip | null = null;
 
   sort$: BehaviorSubject<string>;
@@ -23,7 +23,7 @@ export class ManageComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private clipService: ClipService,
-    // private modal: ModalService
+    private modal: ModalService
   ) { 
     this.sort$ = new BehaviorSubject(this.videoOrder)
   }
@@ -57,5 +57,10 @@ export class ManageComponent implements OnInit {
     })
   }
 
+  openModal($event: Event, clip: IClip) {
+    $event.preventDefault();
+    this.activeClip = clip;
+    this.modal.toggleModal('editClip');
+  }
   
 }
