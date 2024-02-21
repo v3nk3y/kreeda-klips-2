@@ -73,5 +73,21 @@ export class ManageComponent implements OnInit {
       }
     })
   }
+
+  deleteClip($event: Event, clip: IClip) {
+    $event.preventDefault();
+
+    this.clipService.deleteClip(clip);
+
+    // For deleting clip from the list - loop over the clips 
+    this.clips.forEach((element, index) => {
+      // For each clip check if the docID
+      if(element.docID == clip.docID) {
+        // If matched then delete the clip form the list
+        // Remove the item form the array
+        this.clips.splice(index, 1);
+      }
+    })
+  }
   
 }

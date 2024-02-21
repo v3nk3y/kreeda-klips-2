@@ -4,6 +4,7 @@ import IClip from '../models/clip.model';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ import { map, switchMap } from 'rxjs/operators';
 export class ClipService {
   public clipsCollection!: AngularFirestoreCollection<IClip>;
 
-  constructor(private db: AngularFirestore, private auth: AngularFireAuth) {
+  constructor(private db: AngularFirestore, private auth: AngularFireAuth, private storage: AngularFireStorage) {
     this.clipsCollection = this.db.collection('clips');
    }
 
@@ -43,5 +44,14 @@ export class ClipService {
     return  this.clipsCollection.doc(id).update({
       title
     });
+  }
+
+  async deleteClip(clip: IClip) {
+    // We need to grab reference for deleting the clip reference from the storage
+    const clipRef = this.storage.ref(`clips/${clip.fileName}`);
+    await clipRef.delete();
+    
+    // We need to delete the clip document from the collection of documents that contain clipdata
+    await this.clipsCollection.doc(clip.docID).delete();
   }
 }
