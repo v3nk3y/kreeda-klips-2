@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection, DocumentReference, QuerySnapshot } from '@angular/fire/compat/firestore';
 import IClip from '../models/clip.model';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { of } from 'rxjs';
+import { of, BehaviorSubject, combineLatest } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 
@@ -20,16 +20,28 @@ export class ClipService {
     return  this.clipsCollection.add(data);
   }
 
-  getUserClips() {
-    return this.auth.user.pipe(
-      switchMap(user => {
+  getUserClips(sort$: BehaviorSubject<string>) {
+    // Using combineLatest as we need 2 values both user and sort
+    return combineLatest([
+      this.auth.user,
+      sort$
+    ]).pipe(
+      switchMap(values => {
+        // Desctructuring for user and sort
+        const [user, sort] = values;
+
         // If user is null then return an empty array obj as SMap expects an Observable object to subscribe
         if(!user){
           return of([]);
         }
 
         // To generate a query form the the collection to grap user's clips based on the uid of user
-        const query = this.clipsCollection.ref.where('uid', "==", user.uid);
+        const query = this.clipsCollection.ref.where(
+          'uid', "==", user.uid
+          ).orderBy(
+            // Using orderby to sort in desc or asc based on timestamp
+            'timestamp', sort === '1' ? 'desc' : 'asc'
+            );
 
         // Run the query and retunr the object
         return query.get();

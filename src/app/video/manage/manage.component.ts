@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import IClip from '../../models/clip.model';
-import { BehaviorSubject } from 'rxjs';
 import { ClipService } from '../../services/clip.service';
 import { ModalService } from '../../services/modal.service';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-manage',
@@ -17,6 +17,7 @@ export class ManageComponent implements OnInit {
   // to determine the active clip
   activeClip: IClip | null = null;
 
+  // Sort Observable - using to emit values when the sorting order changes
   sort$: BehaviorSubject<string>;
 
   constructor(
@@ -25,7 +26,8 @@ export class ManageComponent implements OnInit {
     private clipService: ClipService,
     private modal: ModalService
   ) { 
-    this.sort$ = new BehaviorSubject(this.videoOrder)
+    // Defualt value set to video order i.e '1'
+    this.sort$ = new BehaviorSubject(this.videoOrder);
   }
 
   ngOnInit(): void {
@@ -33,7 +35,7 @@ export class ManageComponent implements OnInit {
       this.videoOrder = params.sort === '2' ? params.sort : '1'
       this.sort$.next(this.videoOrder)
     })
-    this.clipService.getUserClips().subscribe(docs => {
+    this.clipService.getUserClips(this.sort$).subscribe(docs => {
       // Empty clips array before retrieving the clips
       this.clips = []
 
