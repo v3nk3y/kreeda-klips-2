@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore, AngularFirestoreCollection, DocumentReference } from '@angular/fire/compat/firestore';
+import { AngularFirestore, AngularFirestoreCollection, DocumentReference, QuerySnapshot } from '@angular/fire/compat/firestore';
 import IClip from '../models/clip.model';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { of } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -30,9 +30,12 @@ export class ClipService {
         // To generate a query form the the collection to grap user's clips based on the uid of user
         const query = this.clipsCollection.ref.where('uid', "==", user.uid);
 
-        // Run the query and retunr the promise object
+        // Run the query and retunr the object
         return query.get();
-      })
+      }),
+      // to go over the snapshot collection returned from switchmap to map each document seperately
+      // returns an array of snapshots
+      map(snapshot => (snapshot as QuerySnapshot<IClip>).docs),
     );
   }
 }

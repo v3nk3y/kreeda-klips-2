@@ -11,10 +11,13 @@ import { ClipService } from '../../services/clip.service';
   styleUrls: ['./manage.component.scss']
 })
 export class ManageComponent implements OnInit {
-  videoOrder = '1'
-  clips: IClip[] = []
-  activeClip: IClip | null = null
-  sort$: BehaviorSubject<string>
+  videoOrder = '1';
+  // to store the user clips
+  clips: IClip[] = [];
+  // to determine the ctive clip
+  activeClip: IClip | null = null;
+
+  sort$: BehaviorSubject<string>;
 
   constructor(
     private router: Router,
@@ -30,7 +33,18 @@ export class ManageComponent implements OnInit {
       this.videoOrder = params.sort === '2' ? params.sort : '1'
       this.sort$.next(this.videoOrder)
     })
-    this.clipService.getUserClips().subscribe(console.log);
+    this.clipService.getUserClips().subscribe(docs => {
+      // Empty clips array before retrieving the clips
+      this.clips = []
+
+      docs.forEach(doc => {
+        // Loop over each doc record and push it to the clips array as per Iclip data model
+        this.clips.push({
+          docID: doc.id, // doc id is stored seperately so retrive it seperately
+          ...doc.data(), // for remaining data using ...spread operator
+        })
+      })
+    });
   }
 
   sort(event: Event) {
