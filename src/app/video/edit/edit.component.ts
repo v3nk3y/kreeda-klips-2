@@ -74,6 +74,7 @@ export class EditComponent implements OnInit, OnDestroy, OnChanges{
     }
 
     // Send update event along with updated clip onject to parent for refreshing the data
+    this.activeClip.title = this.title.value;
     this.update.emit(this.activeClip);
     
     this.inSubmission = false;
