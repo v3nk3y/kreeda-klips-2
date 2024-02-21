@@ -1,7 +1,7 @@
-import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { ModalService } from '../../services/modal.service';
 import IClip from '../../models/clip.model';
-import { FormControl, FormGroup, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { ClipService } from '../../services/clip.service';
 
 @Component({
@@ -11,6 +11,7 @@ import { ClipService } from '../../services/clip.service';
 })
 export class EditComponent implements OnInit, OnDestroy, OnChanges{
   @Input() activeClip : IClip | null = null;
+  @Output() update = new EventEmitter();
 
   showAlert = false;
   alertColor = 'blue';
@@ -38,6 +39,11 @@ export class EditComponent implements OnInit, OnDestroy, OnChanges{
     if(!this.activeClip) {
       return;
     }
+
+    // Firx to update the banner of alert on edit modals for other edits
+    this.inSubmission = false;
+    this.showAlert = false;
+
     this.clipID.setValue(this.activeClip?.docID);
     this.title.setValue(this.activeClip?.title);
   }
@@ -47,6 +53,10 @@ export class EditComponent implements OnInit, OnDestroy, OnChanges{
   }
 
   async submit() {
+    if(!this.activeClip) {
+      return
+    }
+
     // Update alert properties
     this.showAlert = true;
     this.inSubmission = true;
@@ -62,9 +72,12 @@ export class EditComponent implements OnInit, OnDestroy, OnChanges{
       this.alertMsg = 'Something went wrong! Please try again later.'
       return;
     }
+
+    // Send update event along with updated clip onject to parent for refreshing the data
+    this.update.emit(this.activeClip);
     
     this.inSubmission = false;
     this.alertColor = 'green'
     this.alertMsg = 'Success! Your clip has been updated.'
-}
+  }
 }

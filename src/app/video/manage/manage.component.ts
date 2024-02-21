@@ -62,5 +62,16 @@ export class ManageComponent implements OnInit {
     this.activeClip = clip;
     this.modal.toggleModal('editClip');
   }
+
+  update(updatedClipEvent: IClip) {
+    // For updating- loop over the clips 
+    this.clips.forEach((element, index) => {
+      // For each clip check if the docID
+      if(element.docID == updatedClipEvent.docID) {
+        // If matched then grab and update tht title to reflect on the page
+        this.clips[index].title = updatedClipEvent.title;
+      }
+    })
+  }
   
 }
