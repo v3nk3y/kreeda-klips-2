@@ -59,7 +59,7 @@ export class UploadComponent implements OnDestroy {
     //   return
     // }
 
-    // this.isDragover = false
+    this.isDragover = false
 
     // this.file = ($event as DragEvent).dataTransfer ?
     //   ($event as DragEvent).dataTransfer?.files.item(0) ?? null :
