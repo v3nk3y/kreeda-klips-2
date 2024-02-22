@@ -63,6 +63,13 @@ export class FfmpegService {
           // name of the file along with file type
           'output_01.png'
     )
+
+    const screenshotFile = this.ffmpeg.FS('readFile', 'output_01.png');
+    const screenshotBlob = new Blob([screenshotFile.buffer], {
+      type: 'image/png'
+    })
+    const screenshotUrl = URL.createObjectURL(screenshotBlob);
+    return [screenshotUrl];
   }
 
   async getScreenshots(file: File) {
@@ -79,12 +86,31 @@ export class FfmpegService {
         '-i', file.name,
         '-ss', `00:00:0${second}`,
         '-frames:v', '1',
-        '-filter:v',  'scale=510:-1',
+        '-filter:v', 'scale=510:-1',
         `output_0${second}.png`
       );
     })
 
     // Since run expects list of string[], we will use spread operator to supply list of strings
     await this.ffmpeg.run(...commands);
+
+    // Preparing screenshots
+    const screenshots: string[] = [];
+
+    seconds.forEach((second) => {
+      // For fetching the screenshot files
+      const screenshotFile = this.ffmpeg.FS('readFile', `output_0${second}.png`)
+      
+      // Converting the 'binary data' retrived form FS into a 'blob'
+      // the buffer propert contains the actual raw data of the file which the Blob needs, where as the outer array is reprensentation of data
+      const screenshotBlob = new Blob([screenshotFile.buffer], {
+        type: 'image/png'
+      })
+
+      // Creating urls form a Blob - which we need to render the image on the web
+      const screenshotUrl = URL.createObjectURL(screenshotBlob);
+    })
+
+    return screenshots;
   }
 }
