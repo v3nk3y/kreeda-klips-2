@@ -121,4 +121,14 @@ export class FfmpegService {
     this.isRunning = false;
     return screenshots;
   }
+
+  async blobFromURL(url: string){
+    // Here we are fetching a file from the file i.e an API requesr kind can be made to fetch the data
+    const response = await fetch(url);
+    
+    // Grab only the blob data form the response object - excluding headers and other infor it might have
+    const blob = await response.blob();
+
+    return blob;
+  }
 }

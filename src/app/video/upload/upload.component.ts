@@ -33,11 +33,12 @@ export class UploadComponent implements OnDestroy{
   user: firebase.User | null = null;
 
   // upload task
-  uploadTask? : AngularFireUploadTask
+  uploadTask? : AngularFireUploadTask;
 
   // Screenshots
   screenshots: string[] = [];
   selectedScreenshot = '';
+  screenshotUploadTask? : AngularFireUploadTask;
 
   // FormControl for Video title capture
   title = new FormControl('', [
@@ -75,7 +76,7 @@ export class UploadComponent implements OnDestroy{
       // if true return so that other uploads are not allowed
       return;
     }
-    this.isDragover = false
+    this.isDragover = false;
 
     // let the TS know the event is of type DragEvent for Intellisense
     // Check if the event is Drag and Drop or else set this to button file upload event
@@ -98,10 +99,10 @@ export class UploadComponent implements OnDestroy{
       this.file.name.replace(/\.[^/.]+$/, '')
     );
   
-    this.nextStep = true
+    this.nextStep = true;
   }
 
-  uploadFile() {
+  async uploadFile() {
     // To disable form chnages while being uploaded
     this.uploadForm.disable();
 
@@ -112,13 +113,19 @@ export class UploadComponent implements OnDestroy{
     this.showPercentage = true;
 
     // For giving the clip an unique name/id - for not overriding on firebase
-    const clipFileName = uuid()
+    const clipFileName = uuid();
     const clipPath = `clips/${clipFileName}.mp4`;
 
-    // Uploading file to firebase
+    // Uploading video clip file to firebase storage
     this.uploadTask = this.storage.upload(clipPath, this.file);
 
-    // referecne to clip on the path where it will be stored using angularfireStorage methods
+    // Uploading selected screenshot for the video clip to firebase storage
+    const screenshotBlob = await this.ffmpegService.blobFromURL(this.selectedScreenshot);
+    const screenshotPath = `screenshots/${clipFileName}.png`;
+    this.screenshotUploadTask = this.storage.upload(screenshotPath, screenshotBlob);
+
+
+    // reference to clip on the path where it will be stored using angularfireStorage methods
     const clifRef = this.storage.ref(clipPath);
 
     // To track the uploading percentage status
@@ -144,8 +151,8 @@ export class UploadComponent implements OnDestroy{
         }
         // To get the details about the document like the 'id' in the collection which we use for routing purpose.
         const clipDocumentReference = await this.clipService.createClip(clip);
-        this.alertColor = 'green'
-        this.alertMsg = 'Success! Your clip has been uploaded.'
+        this.alertColor = 'green';
+        this.alertMsg = 'Success! Your clip has been uploaded.';
         this.showPercentage = false;
         console.log(clip);
 
@@ -157,7 +164,7 @@ export class UploadComponent implements OnDestroy{
       },
       error: (error) => {
         this.alertColor = 'red';
-        this.alertMsg = 'Upload failed! Please try again later.'
+        this.alertMsg = 'Upload failed! Please try again later.';
         this.inSubmission = true;
         this.showPercentage = false;
         console.log(error);
