@@ -8,7 +8,7 @@ import { v4 as uuid } from 'uuid';
 import { last, switchMap } from 'rxjs/operators';
 import { ClipService } from '../../services/clip.service';
 import { FfmpegService } from '../../services/ffmpeg.service';
-import { combineLatest } from 'rxjs';
+import { combineLatest, forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-upload',
@@ -119,15 +119,17 @@ export class UploadComponent implements OnDestroy{
 
     // Uploading video clip file to firebase storage
     this.clipUploadTask = this.storage.upload(clipPath, this.file);
+    // reference to clip on the path where it will be stored using angularfireStorage methods
+    const clifRef = this.storage.ref(clipPath);
 
     // Uploading selected screenshot for the video clip to firebase storage
     const screenshotBlob = await this.ffmpegService.blobFromURL(this.selectedScreenshot);
     const screenshotPath = `screenshots/${clipFileName}.png`;
     this.screenshotUploadTask = this.storage.upload(screenshotPath, screenshotBlob);
+    // reference to screenshot on the path where it will be stored using angularfireStorage methods
+    const screenshotRef = this.storage.ref(screenshotPath);
 
 
-    // reference to clip on the path where it will be stored using angularfireStorage methods
-    const clifRef = this.storage.ref(clipPath);
 
     // To track the uploading percentage status
     // this.uploadTask.percentageChanges().subscribe(progress => {
@@ -145,22 +147,30 @@ export class UploadComponent implements OnDestroy{
         return
       }
       const totalProgress = clipUploadProgress + screenshotUploadProgress;
-      this.percentage = (totalProgress as number)/100;
+      this.percentage = (totalProgress as number)/200;
     });
 
-    this.clipUploadTask.snapshotChanges().pipe(
+    // Cobmining both clip and screenshot snapshotchanges for completion
+    forkJoin([
+      this.clipUploadTask.snapshotChanges(),
+      this.screenshotUploadTask.snapshotChanges()
+    ]).pipe(
       // Wait for the last snapshot change
       last(),
       // Using switchmap to subscribe to the inner observable returned by getdownloadurl and grab the url
-      switchMap(() => clifRef.getDownloadURL())
+      // since we need both clip and screenshot, using forkjoin to get both observables
+      switchMap(() => forkJoin([clifRef.getDownloadURL(), screenshotRef.getDownloadURL()]))
     ).subscribe({
-      next: async (url) => {
+      next: async (urls) => {
+        const [clipUrl, screenshotUrl] = urls;
+
         const clip = {
           uid: this.user?.uid as string,
           displayName: this.user?.displayName as string,
           title: this.title.value as string,
           fileName: `${clipFileName}.mp4` as string,
-          url: url as string,
+          url: clipUrl as string,
+          screenshotURL: screenshotUrl as string,
           timestamp: firebase.firestore.FieldValue.serverTimestamp() // To fetch the timestamp from firebase
         }
         // To get the details about the document like the 'id' in the collection which we use for routing purpose.
@@ -186,5 +196,6 @@ export class UploadComponent implements OnDestroy{
         this.uploadForm.enable();
       },
     });
+
   }
 }
