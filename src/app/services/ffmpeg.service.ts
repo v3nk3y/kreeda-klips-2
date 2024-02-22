@@ -29,7 +29,7 @@ export class FfmpegService {
     this.isReady = true;
   }
 
-  async getScreenshots(file: File) {
+  async getDeafultScreenshotAtStart(file: File) {
 
     // Convert the file to Binary data for storage, use ffmpeg fetfile function
     const data = await fetchFile(file);
@@ -63,5 +63,28 @@ export class FfmpegService {
           // name of the file along with file type
           'output_01.png'
     )
+  }
+
+  async getScreenshots(file: File) {
+
+    const data = await fetchFile(file);
+    this.ffmpeg.FS('writeFile', file.name, data)
+
+    // Grabbing screenshots at 1, 5, 9 seconds
+    const seconds = [1, 5, 9]
+    const commands: string[] = [];
+
+    seconds.forEach((second) => {
+      commands.push(
+        '-i', file.name,
+        '-ss', `00:00:0${second}`,
+        '-frames:v', '1',
+        '-filter:v',  'scale=510:-1',
+        `output_0${second}.png`
+      );
+    })
+
+    // Since run expects list of string[], we will use spread operator to supply list of strings
+    await this.ffmpeg.run(...commands);
   }
 }
