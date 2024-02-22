@@ -39,5 +39,29 @@ export class FfmpegService {
     // FS - short for file system - gives access to packages independent memory system: to read and write, delete files
     // Takes in 3 arguments, Command, file name , binary data file
     this.ffmpeg.FS('writeFile', file.name, data)
+
+    await this.ffmpeg.run(
+      // Input:
+          // options to tell which file in the file system
+          // '-i' -> option will tell ffmpeg to grab a specific file form the file system
+          '-i', file.name,
+
+      // Output Options:
+          // '-ss' -> option will allow us to configure the current timestamp, by default timestamp will be begging of the video
+          // with this option we can tell the time stamp we want to run against : format 'hh:mm:ss' - 
+          // Here we are - grabbing screensot at 1st sec of video
+          '-ss', '00:00:01',
+          // For capturing the frames, second option is no of frames we want to capture
+          '-frames:v', '1',
+          // Resizing the image for screenshot - resiging requires filter
+          // the resizing function is 'scale=width:height' --> To preserve the aspect ration: we must give -1 for example:
+          // Below 510 is width and -1 height is for mainting aspect ratio
+          '-filter:v',  'scale=510:-1',
+
+      //Output:
+          // To create the screenshot
+          // name of the file along with file type
+          'output_01.png'
+    )
   }
 }
