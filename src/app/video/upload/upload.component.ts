@@ -35,6 +35,9 @@ export class UploadComponent implements OnDestroy{
   // upload task
   uploadTask? : AngularFireUploadTask
 
+  // Screenshots
+  screenshots: string[] = [];
+
   // FormControl for Video title capture
   title = new FormControl('', [
     Validators.required,
@@ -81,7 +84,7 @@ export class UploadComponent implements OnDestroy{
     }
 
     // Use service to get screenshots from the video uploaded
-    await this.ffmpegService.getScreenshots(this.file);
+    this.screenshots = await this.ffmpegService.getScreenshots(this.file);
 
     // Set the title of video to file name without extension
     this.title.setValue(

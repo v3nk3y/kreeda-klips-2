@@ -109,6 +109,7 @@ export class FfmpegService {
 
       // Creating urls form a Blob - which we need to render the image on the web
       const screenshotUrl = URL.createObjectURL(screenshotBlob);
+      screenshots.push(screenshotUrl);
     })
 
     return screenshots;
