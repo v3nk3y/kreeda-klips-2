@@ -40,7 +40,13 @@
           <!-- Screenshots -->
           <h2 class="mb-4 text-xl">Select a Thumbnail</h2>
           <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
-            <div *ngFor="let screenshot of screenshots" class="border-4 cursor-pointer border-indigo-400">
+            <div *ngFor="let screenshot of screenshots" 
+              class="border-4 cursor-pointer" 
+              [ngClass]="{ 
+                'border-indigo-400': screenshot === selectedScreenshot,
+                'border-transparent': screenshot !== selectedScreenshot
+                }"
+              (click)="selectedScreenshot = screenshot">
               <!-- Bypass url -->
               <img [src]="screenshot | safeURL">
             </div>

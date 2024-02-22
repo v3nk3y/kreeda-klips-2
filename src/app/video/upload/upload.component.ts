@@ -37,6 +37,7 @@ export class UploadComponent implements OnDestroy{
 
   // Screenshots
   screenshots: string[] = [];
+  selectedScreenshot = '';
 
   // FormControl for Video title capture
   title = new FormControl('', [
@@ -90,6 +91,7 @@ export class UploadComponent implements OnDestroy{
 
     // Use service to get screenshots from the video uploaded
     this.screenshots = await this.ffmpegService.getScreenshots(this.file);
+    this.selectedScreenshot = this.screenshots[0];
 
     // Set the title of video to file name without extension
     this.title.setValue(
