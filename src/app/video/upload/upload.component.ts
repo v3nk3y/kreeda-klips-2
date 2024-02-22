@@ -69,6 +69,11 @@ export class UploadComponent implements OnDestroy{
 
 
   async storeFile($event: Event) {
+    // Check if FFmpeg service is running 
+    if(this.ffmpegService.isRunning){
+      // if true return so that other uploads are not allowed
+      return;
+    }
     this.isDragover = false
 
     // let the TS know the event is of type DragEvent for Intellisense

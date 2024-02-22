@@ -6,6 +6,7 @@ import { createFFmpeg, fetchFile } from '@ffmpeg/ffmpeg';
 })
 export class FfmpegService {
   isReady = false;
+  isRunning = false;
   private ffmpeg;
 
   constructor() {
@@ -30,6 +31,8 @@ export class FfmpegService {
   }
 
   async getDeafultScreenshotAtStart(file: File) {
+    // Flag to know if the ffmeg command is running
+    this.isRunning = true;
 
     // Convert the file to Binary data for storage, use ffmpeg fetfile function
     const data = await fetchFile(file);
@@ -69,10 +72,13 @@ export class FfmpegService {
       type: 'image/png'
     })
     const screenshotUrl = URL.createObjectURL(screenshotBlob);
+    this.isRunning = false;
     return [screenshotUrl];
   }
 
   async getScreenshots(file: File) {
+    // Flag to know if the ffmeg command is running
+    this.isRunning = true;
 
     const data = await fetchFile(file);
     this.ffmpeg.FS('writeFile', file.name, data)
@@ -112,6 +118,7 @@ export class FfmpegService {
       screenshots.push(screenshotUrl);
     })
 
+    this.isRunning = false;
     return screenshots;
   }
 }
