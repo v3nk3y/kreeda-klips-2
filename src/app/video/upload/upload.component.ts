@@ -65,7 +65,7 @@ export class UploadComponent implements OnDestroy{
   }
 
 
-  storeFile($event: Event) {
+  async storeFile($event: Event) {
     this.isDragover = false
 
     // let the TS know the event is of type DragEvent for Intellisense
@@ -79,6 +79,9 @@ export class UploadComponent implements OnDestroy{
     if(!this.file || this.file.type !== 'video/mp4'){
       return;
     }
+
+    // Use service to get screenshots from the video uploaded
+    await this.ffmpegService.getScreenshots(this.file);
 
     // Set the title of video to file name without extension
     this.title.setValue(
