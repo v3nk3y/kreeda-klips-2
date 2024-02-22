@@ -8,6 +8,7 @@ import { v4 as uuid } from 'uuid';
 import { last, switchMap } from 'rxjs/operators';
 import { ClipService } from '../../services/clip.service';
 import { FfmpegService } from '../../services/ffmpeg.service';
+import { combineLatest } from 'rxjs';
 
 @Component({
   selector: 'app-upload',
@@ -33,7 +34,7 @@ export class UploadComponent implements OnDestroy{
   user: firebase.User | null = null;
 
   // upload task
-  uploadTask? : AngularFireUploadTask;
+  clipUploadTask? : AngularFireUploadTask;
 
   // Screenshots
   screenshots: string[] = [];
@@ -66,7 +67,7 @@ export class UploadComponent implements OnDestroy{
 
   ngOnDestroy(): void {
     // To Cancel the upload when user navigated away from page while uploading in progress
-    this.uploadTask?.cancel();
+    this.clipUploadTask?.cancel();
   }
 
 
@@ -117,7 +118,7 @@ export class UploadComponent implements OnDestroy{
     const clipPath = `clips/${clipFileName}.mp4`;
 
     // Uploading video clip file to firebase storage
-    this.uploadTask = this.storage.upload(clipPath, this.file);
+    this.clipUploadTask = this.storage.upload(clipPath, this.file);
 
     // Uploading selected screenshot for the video clip to firebase storage
     const screenshotBlob = await this.ffmpegService.blobFromURL(this.selectedScreenshot);
@@ -129,12 +130,25 @@ export class UploadComponent implements OnDestroy{
     const clifRef = this.storage.ref(clipPath);
 
     // To track the uploading percentage status
-    this.uploadTask.percentageChanges().subscribe(progress => {
-      // By default we get the value multiplied by 100 i.e we get 10,000 - so divide by 100 to get the 100%
-      this.percentage = (progress as number)/100;
+    // this.uploadTask.percentageChanges().subscribe(progress => {
+    //   // By default we get the value multiplied by 100 i.e we get 10,000 - so divide by 100 to get the 100%
+    //   this.percentage = (progress as number)/100;
+    // });
+
+    // Using Combinelatest for tracking both file and screenshot upload tasks as one progress:
+    combineLatest([
+      this.clipUploadTask.percentageChanges(),
+      this.screenshotUploadTask.percentageChanges()
+    ]).subscribe((response) => {
+      const [clipUploadProgress, screenshotUploadProgress] = response;
+      if(!clipUploadProgress || !screenshotUploadProgress) {
+        return
+      }
+      const totalProgress = clipUploadProgress + screenshotUploadProgress;
+      this.percentage = (totalProgress as number)/100;
     });
 
-    this.uploadTask.snapshotChanges().pipe(
+    this.clipUploadTask.snapshotChanges().pipe(
       // Wait for the last snapshot change
       last(),
       // Using switchmap to subscribe to the inner observable returned by getdownloadurl and grab the url
