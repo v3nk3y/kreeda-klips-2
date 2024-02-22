@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { v4 as uuid } from 'uuid';
 import { last, switchMap } from 'rxjs/operators';
 import { ClipService } from '../../services/clip.service';
+import { FfmpegService } from '../../services/ffmpeg.service';
 
 @Component({
   selector: 'app-upload',
@@ -50,8 +51,12 @@ export class UploadComponent implements OnDestroy{
     private auth: AngularFireAuth,
     private router: Router,
     private clipService: ClipService,
+    public ffmpegService: FfmpegService,
   ) { 
     auth.user.subscribe(user => this.user = user);
+
+    // Initialize the ffmpeg service ASAP
+    this.ffmpegService.init();
   }
 
   ngOnDestroy(): void {
