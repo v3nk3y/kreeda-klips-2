@@ -10,5 +10,5 @@ export default interface IClip {
     // Used the type returned by timestamp form firestore
     timestamp: firebase.firestore.FieldValue;
     screenshotURL: string;
-    // screenshotFileName: string;
+    screenshotFileName: string;
   }

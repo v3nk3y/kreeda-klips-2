@@ -168,9 +168,10 @@ export class UploadComponent implements OnDestroy{
           uid: this.user?.uid as string,
           displayName: this.user?.displayName as string,
           title: this.title.value as string,
-          fileName: `${clipFileName}.mp4` as string,
-          url: clipUrl as string,
-          screenshotURL: screenshotUrl as string,
+          fileName: `${clipFileName}.mp4`,
+          url: clipUrl,
+          screenshotURL: screenshotUrl,
+          screenshotFileName: `${clipFileName}.png`,
           timestamp: firebase.firestore.FieldValue.serverTimestamp() // To fetch the timestamp from firebase
         }
         // To get the details about the document like the 'id' in the collection which we use for routing purpose.
