@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ClipService } from '../services/clip.service';
 // We need to import the pipes
 import { FireTimestampPipe } from '../pipes/fire-timestamp.pipe';
@@ -11,18 +11,24 @@ import { DatePipe } from '@angular/common';
   providers: [FireTimestampPipe, DatePipe] // We need to register the pipes on component
 })
 export class ClipsListComponent implements OnInit, OnDestroy{
-  
+  @Input() scrollingEnabled = true;
   constructor(public clipService: ClipService) {
     // On component load, fetch the clips
     this.clipService.getClips();
   }
 
   ngOnDestroy(): void {
-    window.removeEventListener('scroll', this.handleScroll);
+    if(this.scrollingEnabled) {
+      window.removeEventListener('scroll', this.handleScroll);
+    }
+    // Reset page clips when moved away from this page, on component destroy
+    this.clipService.pageClips = [];
   }
 
   ngOnInit(): void {
-    window.addEventListener('scroll', this.handleScroll);
+    if(this.scrollingEnabled){
+      window.addEventListener('scroll', this.handleScroll);
+    }
   }
 
   handleScroll = () => {
