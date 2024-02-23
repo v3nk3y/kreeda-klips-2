@@ -91,5 +91,19 @@ export class ManageComponent implements OnInit {
       }
     })
   }
+
+  async copyToClipboard($event: MouseEvent, clipDocID: string | undefined){
+    $event.preventDefault();
+    if(!clipDocID) {
+      return;
+    }
+
+    // Build and grab the Clip url
+    const url = `${location.origin}/clip/${clipDocID}`
+
+    // clipboard functions can be accessed via navigator.clipboard
+    await navigator.clipboard.writeText(url);
+
+  }
   
 }
