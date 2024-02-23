@@ -16,6 +16,7 @@ import { ClipComponent } from './clip/clip.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 import { ClipsListComponent } from './clips-list/clips-list.component';
+import { FireTimestampPipe } from './pipes/fire-timestamp.pipe';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { ClipsListComponent } from './clips-list/clips-list.component';
     AboutComponent,
     ClipComponent,
     NotFoundComponent,
-    ClipsListComponent
+    ClipsListComponent,
+    FireTimestampPipe
   ],
   imports: [
     BrowserModule,

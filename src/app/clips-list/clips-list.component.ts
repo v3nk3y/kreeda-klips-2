@@ -1,10 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ClipService } from '../services/clip.service';
+// We need to import the pipes
+import { FireTimestampPipe } from '../pipes/fire-timestamp.pipe';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-clips-list',
   templateUrl: './clips-list.component.html',
-  styleUrl: './clips-list.component.scss'
+  styleUrl: './clips-list.component.scss',
+  providers: [FireTimestampPipe, DatePipe] // We need to register the pipes on component
 })
 export class ClipsListComponent implements OnInit, OnDestroy{
   
