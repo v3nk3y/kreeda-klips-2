@@ -5,7 +5,7 @@
 
 
 body {
-    background-color: #161d31;
+    background-color: #111111;
   }
   
   .material-icons.text-base {
@@ -13,11 +13,13 @@ body {
   }
   
   .bg-secondary {
-    background-color: #283046;
+    background-color: #252525;
   }
   
   .bg-gradient {
-    background: linear-gradient(132deg, #FC415A, #591BC5, #212335);
+    // background: linear-gradient(132deg, #FC415A, #591BC5, #212335);
+    // background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.8));
+    background: linear-gradient(#00000033, #000000CC);
     background-size: 400% 400%;
     animation: gradient 10s ease infinite;
   }
