@@ -11,7 +11,6 @@ import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { environment } from '../environments/environment.development';
 import { HomeComponent } from './home/home.component';
 import { AboutComponent } from './about/about.component';
-import { VideoModule } from './video/video.module';
 import { ClipComponent } from './clip/clip.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { AngularFireStorageModule } from '@angular/fire/compat/storage';
@@ -36,7 +35,6 @@ import { FireTimestampPipe } from './pipes/fire-timestamp.pipe';
     AngularFireAuthModule,
     AngularFirestoreModule,
     AngularFireStorageModule,
-    VideoModule,
     AppRoutingModule,
   ],
   providers: [],
