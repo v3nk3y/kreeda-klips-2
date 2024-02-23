@@ -9,7 +9,11 @@ export class FireTimestampPipe implements PipeTransform {
 
   constructor(private datePipe: DatePipe) {}
 
-  transform(value: firebase.firestore.FieldValue) {
+  transform(value: firebase.firestore.FieldValue | undefined) {
+    // Checking for empty value
+    if(!value){
+      return '';
+    }
     //  We need to assert the type of firebase value as ToDate() cantrecognise the type otherwise
     const date = (value as firebase.firestore.Timestamp).toDate();
     return this.datePipe.transform(date, 'mediumDate');
