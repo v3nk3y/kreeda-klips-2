@@ -22,7 +22,7 @@ export class UploadComponent implements OnDestroy{
   nextStep = false;
 
   showAlert = false;
-  alertColor = 'blue';
+  alertColor = 'yellow';
   alertMsg = 'Please wait ! Your clip is being uploaded.';
   inSubmission = false;
 
@@ -108,7 +108,7 @@ export class UploadComponent implements OnDestroy{
     this.uploadForm.disable();
 
     this.showAlert = true;
-    this.alertColor = 'blue';
+    this.alertColor = 'yellow';
     this.alertMsg = 'Please wait! Your clip is being uploaded.';
     this.inSubmission = true;
     this.showPercentage = true;

@@ -14,7 +14,7 @@ export class EditComponent implements OnInit, OnDestroy, OnChanges{
   @Output() update = new EventEmitter();
 
   showAlert = false;
-  alertColor = 'blue';
+  alertColor = 'yellow';
   alertMsg = 'Please wait ! Your clip is being updated.';
   inSubmission = false;
 
@@ -60,7 +60,7 @@ export class EditComponent implements OnInit, OnDestroy, OnChanges{
     // Update alert properties
     this.showAlert = true;
     this.inSubmission = true;
-    this.alertColor = 'blue';
+    this.alertColor = 'yellow';
     this.alertMsg = 'Please wait ! Your clip is being updated.';
 
     try {   

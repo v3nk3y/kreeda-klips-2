@@ -35,13 +35,13 @@
         <app-input [control]="registerForm.controls.phoneNumber" placeholder="Enter Phone Number" format="(000)000-0000"></app-input>
     </div>
     <!-- TOS -->
-    <div class="mb-3 pl-6">
+    <div class="mb-6 pl-6 mt-2">
         <input type="checkbox" class="w-4 h-4 float-left -ml-6 mt-1 rounded" />
-        <label class="inline-block">Accept terms of service</label>
+        <label class="inline-block">Accept Terms & Conditions</label>
     </div>
     <button type="submit"
-        class="block w-full bg-indigo-400 text-white py-1.5 px-3 rounded transition
-        hover:bg-indigo-500 disabled:opacity-50 disabled:bg-indigo-400" [disabled]="registerForm.invalid || inSubmission">
+        class="block w-full bg-yellow-600 text-white py-1.5 px-3 rounded transition
+        hover:bg-yellow-500 disabled:opacity-50 disabled:bg-yellow-600" [disabled]="registerForm.invalid || inSubmission">
         Submit
     </button>
 </form>

@@ -1,6 +1,6 @@
 <!-- Header -->
 <header id="header" class="bg-secondary">
-    <nav class="container mx-auto flex justify-start items-center py-8 px-4">
+    <nav class="container mx-auto flex justify-start items-center py-8">
       <!-- App Name -->
       <a class="text-3xl text-yellow-400 font-bold mr-4" routerLink="/">KreedaKlips</a>
 
@@ -8,20 +8,20 @@
         <!-- Primary Navigation -->
         <ul class="flex flex-row mt-1 gap-3">
           <!-- Navigation Links -->
-          <li routerLinkActive="bg-yellow-600" class="rounded-lg hover:bg-yellow-600 transition duration-300 py-1">
+          <li class="rounded-lg hover:bg-yellow-600 transition duration-300 py-1">
             <a class="px-4" routerLink="/about">About</a>
           </li>
           <li *ngIf="!(auth.isAuthenticated$| async); else authLinks" class="rounded-lg hover:bg-yellow-600 transition duration-300 py-1">
             <a class="px-4" href="#" (click)="openModal($event)">Login</a>
           </li>
           <ng-template #authLinks>
-            <li routerLinkActive="bg-yellow-600" class="rounded-lg hover:bg-yellow-600 transition duration-300 py-1">
-              <a class="px-4" routerLink="/manage" [queryParams]="{sort : '1'}">Manage</a>
+            <li class="rounded-lg hover:bg-yellow-600 transition duration-300 py-1">
+              <a class="px-4" routerLink="/manage" [queryParams]="{sort: '1'}">Manage</a>
             </li>
-            <li routerLinkActive="bg-yellow-600" class="rounded-lg hover:bg-yellow-600 transition duration-300 py-1">
+            <li class="rounded-lg hover:bg-yellow-600 transition duration-300 py-1">
               <a class="px-4" routerLink="/upload" routerLinkActive="text-white" >Upload</a>
             </li>
-            <li routerLinkActive="bg-yellow-600" class="rounded-lg hover:bg-yellow-600 transition duration-300 py-1">
+            <li class="rounded-lg hover:bg-yellow-600 transition duration-300 py-1">
               <a class="px-4" href="#" (click)="auth.logOut($event)">Logout</a>
             </li>
           </ng-template>

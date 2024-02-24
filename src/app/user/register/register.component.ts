@@ -39,7 +39,7 @@ export class RegisterComponent {
   }, [RegisterValidators.match('password', 'confirm_password')]);
   showAlert = false;
   alertMsg = 'Please wait! Your account is being created.';
-  alertColor = 'blue';
+  alertColor = 'yellow';
   inSubmission = false;
 
 
@@ -49,7 +49,7 @@ export class RegisterComponent {
     this.inSubmission = true;
     this.showAlert = true;
     this.alertMsg = 'Please wait! Your account is being created.';
-    this.alertColor = 'blue';
+    this.alertColor = 'yellow';
 
     try {
         await this.authService.createUser(this.registerForm.value as IUser);

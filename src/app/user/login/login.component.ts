@@ -14,7 +14,7 @@ export class LoginComponent {
   emailPattern = '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}';
   showAlert = false;
   alertMsg = 'Please wait! We are logging you in.';
-  alertColor = 'blue';
+  alertColor = 'yellow';
   inSubmission = false;
 
   constructor(private auth: AngularFireAuth) {}
@@ -22,7 +22,7 @@ export class LoginComponent {
   async login() {
     this.showAlert = true;
     this.alertMsg = 'Please wait! We are logging you in.';
-    this.alertColor = 'blue';
+    this.alertColor = 'yellow';
     this.inSubmission = true;
     
     try {

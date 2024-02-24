@@ -6,7 +6,7 @@ import { Component, Input } from '@angular/core';
   styleUrl: './alert.component.scss'
 })
 export class AlertComponent {
-  @Input() color = 'blue';
+  @Input() color = 'yellow';
 
   get bgColor() {
     return `bg-${this.color}-400`;
