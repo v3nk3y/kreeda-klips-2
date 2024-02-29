@@ -1,13 +1,10 @@
 <!-- Header -->
-<header id="header" class="bg-secondary">
+<!-- <header id="header" class="bg-secondary">
     <nav class="container mx-auto flex justify-start items-center py-8">
-      <!-- App Name -->
       <a class="text-3xl text-yellow-400 font-bold mr-4" routerLink="/">KreedaKlips</a>
 
       <div class="flex flex-grow items-center justify-end">
-        <!-- Primary Navigation -->
         <ul class="flex flex-row mt-1 gap-3">
-          <!-- Navigation Links -->
           <li class="rounded-lg hover:bg-yellow-600 transition duration-300 py-1">
             <a class="px-4" routerLink="/about">About</a>
           </li>
@@ -28,4 +25,37 @@
         </ul>
       </div>
     </nav>
-</header>
+</header> -->
+
+<header id="header" class="bg-secondary">
+  <nav class="container mx-auto flex justify-between items-center py-8">
+    <a class="text-3xl text-yellow-400 font-bold mr-4" routerLink="/">KreedaKlips</a>
+
+    <div class="hidden md:flex flex-grow items-center justify-end">
+      <ul class="flex flex-row mt-1 gap-3">
+        <li class="rounded-lg hover:bg-yellow-600 transition duration-300 py-1">
+          <a class="px-4" routerLink="/about">About</a>
+        </li>
+        <li *ngIf="!(auth.isAuthenticated$| async); else authLinks" class="rounded-lg hover:bg-yellow-600 transition duration-300 py-1">
+          <a class="px-4" href="#" (click)="openModal($event)">Login</a>
+        </li>
+        <ng-template #authLinks>
+          <li class="rounded-lg hover:bg-yellow-600 transition duration-300 py-1">
+            <a class="px-4" routerLink="/manage" [queryParams]="{sort: '1'}">Manage</a>
+          </li>
+          <li class="rounded-lg hover:bg-yellow-600 transition duration-300 py-1">
+            <a class="px-4" routerLink="/upload" routerLinkActive="text-white">Upload</a>
+          </li>
+          <li class="rounded-lg hover:bg-yellow-600 transition duration-300 py-1">
+            <a class="px-4" href="#" (click)="auth.logOut($event)">Logout</a>
+          </li>
+        </ng-template>
+      </ul>
+    </div>
+
+    <button class="md:hidden focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-400 p-2">
+      <svg class="w-6 h-6 fill-current text-yellow-400" viewBox="0 0 24 24">
+        <path d="M4 6H20M4 12H20M4 18H11v2H13v-2h8z" />
+      </svg>
+    </button>
+  </nav>

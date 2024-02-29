@@ -5,6 +5,7 @@ import { SharedModule } from '../shared/shared.module';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { LoadingComponent } from '../shared/loading/loading.component';
 
 
 
@@ -21,7 +22,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     FormsModule
   ],
   exports: [
-    AuthModalComponent
+    AuthModalComponent,
+    LoadingComponent
   ]
 })
 export class UserModule { }
